@@ -18,14 +18,12 @@ class _HomeState extends State<Home> {
       body: Column(children: <Widget>[
         Expanded(
           child: ListView.builder(
-
-            itemCount: _listTarefas.length,
-            itemBuilder: (context,index){
-              return ListTile(
-                title: Text(_listTarefas[index]),
-              );
-            }
-          ),
+              itemCount: _listTarefas.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_listTarefas[index]),
+                );
+              }),
         ),
       ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -36,7 +34,20 @@ class _HomeState extends State<Home> {
         label: Text("Add"),
         elevation: 9,
         onPressed: () {
-          showDialog(context: null);
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Adicionar Lista de Tarefa"),
+                  content: TextField(
+                    decoration: InputDecoration(labelText: "Digite sua tarefa"),
+                    onChanged: (text) {},
+                  ),
+                  actions: <Widget>[
+                    // a implementar
+                  ],
+                );
+              });
         },
       ),
     );
