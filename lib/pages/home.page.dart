@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -6,6 +7,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  _salvarArquivo() async {
+
+  }
+
   List _listTarefas = ["Ir ao mercado", "Estudar", "Exercicio do dia"];
 
   @override
@@ -45,6 +51,15 @@ class _HomeState extends State<Home> {
                   ),
                   actions: <Widget>[
                     // a implementar
+                    FlatButton(
+                      child: Text("Cancelar"),
+                      onPressed: () => Navigator.pop(context),
+                    ),FlatButton(
+                      child: Text("Salvar"),
+                      onPressed: (){
+                        //save task
+                      },
+                    )
                   ],
                 );
               });
