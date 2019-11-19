@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +12,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   _salvarArquivo() async {
+
+    final diretorio = await getApplicationDocumentsDirectory();
+    print("Caminho: ${diretorio}");
+    var arquivo = File ( "${diretorio.path}/dados.json" );
+
+    //criar dados
+    Map<String,dynamic> tarefa = Map();
+    tarefa["titulo"] = "ir ao mercado";
+    tarefa["realizada"] = false;
+    _listTarefas.add( tarefa );
+
+    //convert a lista para json
+    String dados = json.encode(_listTarefas);
+
+    arquivo.writeAsStringSync(dados);
 
   }
 
@@ -58,6 +76,7 @@ class _HomeState extends State<Home> {
                       child: Text("Salvar"),
                       onPressed: (){
                         //save task
+                        _salvarArquivo();
                       },
                     )
                   ],
