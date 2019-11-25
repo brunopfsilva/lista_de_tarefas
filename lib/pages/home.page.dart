@@ -11,29 +11,67 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  _salvarArquivo() async {
+  List _listaTarefas = [];
+
+
+ Future<File> _getFile ( ) async {
 
     final diretorio = await getApplicationDocumentsDirectory();
-    print("Caminho: ${diretorio}");
-    var arquivo = File ( "${diretorio.path}/dados.json" );
+    return File ( "${diretorio.path}/dados.json" );
+
+  }
+
+
+  _lerArquivo () async {
+    try{
+
+      final arquivo = await _getFile();
+      return arquivo.readAsString();
+
+    }
+    catch(e){
+      return null;
+    }
+  }
+
+  _salvarArquivo() async {
+
+    var arquivo = await _getFile();
 
     //criar dados
     Map<String,dynamic> tarefa = Map();
     tarefa["titulo"] = "ir ao mercado";
     tarefa["realizada"] = false;
-    _listTarefas.add( tarefa );
+    _listaTarefas.add( tarefa );
 
     //convert a lista para json
-    String dados = json.encode(_listTarefas);
+    String dados = json.encode(_listaTarefas);
 
     arquivo.writeAsStringSync(dados);
 
   }
 
-  List _listTarefas = ["Ir ao mercado", "Estudar", "Exercicio do dia"];
+
+  @override
+  void initState() {
+    super.initState();
+    //leia o arquivo então depois de lido faça()then recebe uma funcao anonima
+    _lerArquivo().then((dados){
+
+      setState(() {
+        //convert novamente para lista
+        _listaTarefas = json.decode(dados);
+
+      });
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    _salvarArquivo();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de tarefas"),
@@ -42,10 +80,10 @@ class _HomeState extends State<Home> {
       body: Column(children: <Widget>[
         Expanded(
           child: ListView.builder(
-              itemCount: _listTarefas.length,
+              itemCount: _listaTarefas.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_listTarefas[index]),
+                  title: Text(_listaTarefas[index]['titulo']),
                 );
               }),
         ),
